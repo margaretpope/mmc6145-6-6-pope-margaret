@@ -18,12 +18,14 @@ export default withIronSessionApiRoute(
       case 'POST':
         const addBook = await db.book.add(user.id, req.body)
         if (!addBook) {
+          req.session.destroy()
           return res.status(401).end()
         }
         return res.status(200).json({book: addBook})
       case 'DELETE':
         const deleteBook = await db.book.remove(user.id, req.body.id)
         if (!deleteBook) {
+          req.session.destroy()
           return res.status(401).end()
         }
         return res.status(200).json({book: deleteBook})
